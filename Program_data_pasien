@@ -1,0 +1,191 @@
+#include <iostream>
+#include <iomanip>
+#include <vector>
+
+using namespace std;
+
+struct Dokter {
+    string nama;
+    string spesialisasi;
+};
+
+struct Penyakit {
+    string nama;
+};
+
+struct Pasien {
+    string nama;
+    vector<Penyakit> penyakit;
+};
+
+struct Tagihan {
+    string namaPasien;
+    double biaya;
+};
+
+vector<Dokter> daftarDokter;
+vector<Pasien> daftarPasien;
+vector<Penyakit> daftarPenyakit;
+vector<Tagihan> daftarTagihan;
+
+void entriDataDokter() {
+    Dokter dokter;
+    cout << "Masukkan Nama Dokter: ";
+    getline(cin, dokter.nama);
+    cout << "Masukkan Spesialisasi Dokter: ";
+    getline(cin, dokter.spesialisasi);
+    daftarDokter.push_back(dokter);
+    cout << "Data dokter telah berhasil diinput." << endl;
+}
+
+void entriDataPasien() {
+    Pasien pasien;
+    cout << "Masukkan Nama Pasien: ";
+    getline(cin, pasien.nama);
+
+    char tambahPenyakit;
+    do {
+        Penyakit penyakit;
+        cout << "Masukkan Nama Penyakit: ";
+        getline(cin, penyakit.nama);
+        pasien.penyakit.push_back(penyakit);
+
+        cout << "Tambahkan penyakit lain untuk pasien ini? (y/n): ";
+        cin >> tambahPenyakit;
+        cin.ignore();
+    } while (tambahPenyakit == 'y' || tambahPenyakit == 'Y');
+
+    daftarPasien.push_back(pasien);
+    cout << "Data pasien telah berhasil diinput." << endl;
+}
+
+void entriDataPenyakit() {
+    Penyakit penyakit;
+    cout << "Masukkan Nama Penyakit: ";
+    getline(cin, penyakit.nama);
+    daftarPenyakit.push_back(penyakit);
+    cout << "Data penyakit telah berhasil diinput." << endl;
+}
+
+void entriDataPenyakitPasien() {
+    string namaPasien;
+    cout << "Masukkan Nama Pasien: ";
+    getline(cin, namaPasien);
+
+    Pasien* pasien = nullptr;
+    for (auto& p : daftarPasien) {
+        if (p.nama == namaPasien) {
+            pasien = &p;
+            break;
+        }
+    }
+
+    if (pasien != nullptr) {
+        char tambahPenyakit;
+        do {
+            Penyakit penyakit;
+            cout << "Masukkan Nama Penyakit: ";
+            getline(cin, penyakit.nama);
+            pasien->penyakit.push_back(penyakit);
+
+            cout << "Tambahkan penyakit lain untuk pasien ini? (y/n): ";
+            cin >> tambahPenyakit;
+            cin.ignore();
+        } while (tambahPenyakit == 'y' || tambahPenyakit == 'Y');
+
+        cout << "Data penyakit pasien telah berhasil diinput." << endl;
+    } else {
+        cout << "Pasien dengan nama tersebut tidak ditemukan." << endl;
+    }
+}void entriDataTagihan() {
+    Tagihan tagihan;
+    cout << "Masukkan Nama Pasien: ";
+    getline(cin, tagihan.namaPasien);
+    cout << "Masukkan Biaya Tagihan: ";
+    cin >> tagihan.biaya;
+    cin.ignore();
+
+    daftarTagihan.push_back(tagihan);
+    cout << "Data tagihan telah berhasil diinput." << endl;
+}
+
+void tampilkanLaporanTagihan() {
+    cout << "Laporan Tagihan Pasien" << endl;
+    cout << "======================" << endl;
+
+    for (const auto& tagihan : daftarTagihan) {
+        cout << "Nama Pasien: " << tagihan.namaPasien << endl;
+        cout << "Biaya: " << tagihan.biaya << endl;
+        cout << endl;
+    }
+}
+
+void tampilkanRekapitulasiTagihan() {
+    cout << "Rekapitulasi Tagihan Pasien per Hari" << endl;
+    cout << "===================================" << endl;
+
+    // Implementasikan logika untuk menampilkan rekapitulasi tagihan per hari di sini
+
+}
+
+void tampilkanMenu() {
+    cout << "==================================" << endl;
+    cout << "Aplikasi Pengelolaan Data Pasien" << endl;
+    cout << "==================================" << endl;
+    cout << "1. Entri Data Dokter" << endl;
+    cout << "2. Entri Data Pasien" << endl;
+    cout << "3. Entri Data Penyakit" << endl;
+    cout << "4. Entri Data Penyakit Pasien" << endl;
+    cout << "5. Entri Data Tagihan" << endl;
+    cout << "6. Membuat Laporan Tagihan Pasien" << endl;
+    cout << "7. Menampilkan Rekapitulasi Tagihan Pasien per Hari" << endl;
+    cout << "8. Keluar" << endl;
+    cout << "==================================" << endl;
+    cout << "Pilih menu (1-8): ";
+}
+
+int main() {
+    int pilihan;
+    bool keluar = false;
+    
+    while (!keluar) {
+        tampilkanMenu();
+        cin >> pilihan;
+        cin.ignore();
+        
+        switch (pilihan) {
+            case 1:
+                entriDataDokter();
+                break;
+            case 2:
+                entriDataPasien();
+                break;
+            case 3:
+                entriDataPenyakit();
+                break;
+            case 4:
+                entriDataPenyakitPasien();
+                break;
+            case 5:
+                entriDataTagihan();
+                break;
+            case 6:
+                tampilkanLaporanTagihan();
+                break;
+            case 7:
+                tampilkanRekapitulasiTagihan();
+                break;
+            case 8:
+                keluar = true;
+                cout << "Terima kasih telah menggunakan program ini. Sampai jumpa!" << endl;
+                break;
+            default:
+                cout << "Pilihan tidak valid. Silakan pilih menu yang sesuai." << endl;
+                break;
+        }
+        
+        cout << endl;
+    }
+    
+    return 0;
+}
